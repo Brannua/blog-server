@@ -29,7 +29,31 @@ const getDetail = (id) => {
   }
 }
 
+const newBlog = (blogData = {}) => {
+  // blogData是一个博客对象, 包含title、content属性
+  // 先返回假数据
+  return {
+    id: 3 // 表示新建博客插入到数据库表中的id
+  }
+}
+
+const updateBlog = (id, blogData = {}) => {
+  // blogData是一个博客对象, 包含title、content属性
+  // id 就是要更新的博客在数据库中的唯一标识
+  // 先返回假数据
+  return true;
+}
+
+const delBlog = (id) => {
+  // id 就是要删除的博客在数据库中的唯一标识
+  // 先返回假数据
+  return true;
+}
+
 module.exports = {
   getList,
-  getDetail
+  getDetail,
+  newBlog,
+  updateBlog,
+  delBlog
 }
