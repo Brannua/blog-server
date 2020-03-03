@@ -1,11 +1,15 @@
 /* env: process.env.NODE_ENV */
 
 const handleBlogRouter = require('./src/router/blog'),
-  handleUserRouter = require('./src/router/user');
+  handleUserRouter = require('./src/router/user'),
+  querystring = require('querystring');
 
 const serverHandel = (req, res) => {
-  // 解析出path并挂到req上
-  req.path = req.url.split('?')[0];
+  const url = req.url;
+  // 解析出请求的路由并挂到req上
+  req.path = url.split('?')[0];
+  // 解析出GET请求的参数挂到req上
+  req.query = querystring.parse(url.split('?')[1]);
   // 设置返回字符串数据的格式为json
   res.setHeader('Content-type', 'application/json');
 
