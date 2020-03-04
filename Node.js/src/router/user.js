@@ -13,12 +13,13 @@ const handleUserRouter = (req, res) => {
   // 登录接口
   if (method === 'POST' && path === '/api/user/login') {
     const { username, password } = req.body
-    result = loginCheck(username, password);
-    if (result) {
-      return new SuccessModel();
-    } else {
-      return new ErrorModel('登录失败');
-    }
+    return loginCheck(username, password).then(data => {
+      if (data.username) {
+        return new SuccessModel();
+      } else {
+        return new ErrorModel('登录失败');
+      }
+    });
   }
 
 }
