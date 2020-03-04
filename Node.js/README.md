@@ -89,7 +89,7 @@ http.createServer((req, res) => {
       sql += ` and author='${author}'`;
     }
     if (keyword) {
-      sql += ` and keyword='${keyword}'`;
+      sql += ` and title like '%${keyword}%'`;
     }
     // ...
   }

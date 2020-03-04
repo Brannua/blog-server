@@ -20,7 +20,7 @@ const handleBlogRouter = (req, res) => {
   // 获取博客列表
   if (method === 'GET' && path === '/api/blog/list') {
     const author = req.query.author || '',
-      keyword = req.query.author || '';
+      keyword = req.query.keyword || '';
     return getList(author, keyword).then(listData => {
       return new SuccessModel(listData);
     });
@@ -28,15 +28,18 @@ const handleBlogRouter = (req, res) => {
 
   // 获取博客详情
   if (method === 'GET' && path === '/api/blog/detail') {
-    const data = getDetail(id);
-    return new SuccessModel(data);
+    return getDetail(id).then(data => {
+      return new SuccessModel(data);
+    });
   }
 
   // 新建一篇博客
   if (method === 'POST' && path === '/api/blog/new') {
-    const blogData = req.body,
-      data = newBlog(blogData);
-    return new SuccessModel(data);
+    const blogData = req.body;
+    blogData.author = 'zhangsan'; // 假作者,待开发登录功能时再修改
+    return newBlog(blogData).then(data => {
+      return new SuccessModel(data);
+    });
   }
 
   // 更新一篇博客
