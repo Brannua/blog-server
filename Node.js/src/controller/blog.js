@@ -40,16 +40,32 @@ const newBlog = (blogData = {}) => {
 }
 
 const updateBlog = (id, blogData = {}) => {
-  // blogData是一个博客对象, 包含title、content属性
-  // id 就是要更新的博客在数据库中的唯一标识
-  // 先返回假数据
-  return true;
+  const title = blogData.title,
+    content = blogData.content;
+
+  const sql = `
+    update blogs set title='${title}', content='${content}' where id=${id}
+  `;
+
+  return execSQL(sql).then(updateData => {
+    if (updateData.affectedRows > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  });
 }
 
-const delBlog = (id) => {
-  // id 就是要删除的博客在数据库中的唯一标识
-  // 先返回假数据
-  return true;
+const delBlog = (id, author) => {
+  const sql = `delete from blogs where id='${id}' and author='${author}'`;
+
+  return execSQL(sql).then(delData => {
+    if (delData.affectedRows > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  });
 }
 
 module.exports = {

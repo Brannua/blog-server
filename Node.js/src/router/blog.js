@@ -44,23 +44,26 @@ const handleBlogRouter = (req, res) => {
 
   // 更新一篇博客
   if (method === 'POST' && path === '/api/blog/update') {
-    const blogData = req.body,
-      result = updateBlog(id, blogData);
-    if (result) {
-      return new SuccessModel();
-    } else {
-      return new ErrorModel('更新博客失败');
-    }
+    const blogData = req.body;
+    return updateBlog(id, blogData).then(value => {
+      if (value) {
+        return new SuccessModel();
+      } else {
+        return new ErrorModel('更新博客失败');
+      }
+    });
   }
 
   // 删除一篇博客
   if (method === 'POST' && path === '/api/blog/del') {
-    const result = delBlog(id);
-    if (result) {
-      return new SuccessModel();
-    } else {
-      return new ErrorModel('删除博客失败');
-    }
+    const author = 'zhangsan'; // 假作者,待开发登录功能时再修改
+    return delBlog(id, author).then(val => {
+      if (val) {
+        return new SuccessModel();
+      } else {
+        return new ErrorModel('删除博客失败');
+      }
+    });
   }
 
 }
