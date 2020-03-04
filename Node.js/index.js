@@ -1,4 +1,3 @@
-
 const handleBlogRouter = require('./src/router/blog'),
   handleUserRouter = require('./src/router/user'),
   querystring = require('querystring');
@@ -44,10 +43,13 @@ const serverHandel = (req, res) => {
     // POST请求的数据挂到req上
     req.body = postData;
 
+    const blogResult = handleBlogRouter(req, res);
     // 处理blog路由
-    const blogData = handleBlogRouter(req, res);
-    if (blogData) {
-      res.end(JSON.stringify(blogData));
+    if (blogResult) {
+      blogResult.then(blogData => {
+        res.end(JSON.stringify(blogData));
+      });
+      // 命中路由则终止继续向下执行
       return;
     }
 
@@ -55,6 +57,7 @@ const serverHandel = (req, res) => {
     const userData = handleUserRouter(req, res);
     if (userData) {
       res.end(JSON.stringify(userData));
+      // 命中路由则终止继续向下执行
       return;
     }
 

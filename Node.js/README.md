@@ -79,3 +79,18 @@ http.createServer((req, res) => {
   console.log('running at port 3000.');
 });
 ```
+
+- 当controller中拼接sql语句, 参数不确定导致查询条件不确定的时候, 为了防止拼接的sql语句的格式异常导致报错, 我采用如下小技巧
+
+  ```
+  const getList = (author, keyword) => {
+    let sql = 'select * from blogs where 1=1';
+    if (author) {
+      sql += ` and author='${author}'`;
+    }
+    if (keyword) {
+      sql += ` and keyword='${keyword}'`;
+    }
+    // ...
+  }
+  ```

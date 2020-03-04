@@ -20,9 +20,10 @@ const handleBlogRouter = (req, res) => {
   // 获取博客列表
   if (method === 'GET' && path === '/api/blog/list') {
     const author = req.query.author || '',
-      keyword = req.query.author || '',
-      listData = getList(author, keyword);
-    return new SuccessModel(listData);
+      keyword = req.query.author || '';
+    return getList(author, keyword).then(listData => {
+      return new SuccessModel(listData);
+    });
   }
 
   // 获取博客详情
@@ -42,17 +43,17 @@ const handleBlogRouter = (req, res) => {
   if (method === 'POST' && path === '/api/blog/update') {
     const blogData = req.body,
       result = updateBlog(id, blogData);
-      if (result) {
-        return new SuccessModel();
-      } else {
-        return new ErrorModel('更新博客失败');
-      }
+    if (result) {
+      return new SuccessModel();
+    } else {
+      return new ErrorModel('更新博客失败');
+    }
   }
 
   // 删除一篇博客
   if (method === 'POST' && path === '/api/blog/del') {
     const result = delBlog(id);
-    if (result){
+    if (result) {
       return new SuccessModel();
     } else {
       return new ErrorModel('删除博客失败');
