@@ -1,12 +1,10 @@
 # 使用原生Node.js开发接口
 
-- 从浏览器输入URL到显示页面的整个流程
+- 使用cross-env设置环境变量
 
-  - 域名经过DNS解析成ip地址 , ip地址对应一台服务器 , 客户端与服务器之间建立TCP链接( 三次握手 ) , 客户端发送http请求
-
-  - server端接收到http请求 , 处理并返回
-
-  - 客户端接收到返回数据再处理数据( 如页面渲染 , 执行js )
+  ```
+  env: process.env.NODE_ENV
+  ```
 
 - 学习nodejs处理http请求
 
@@ -30,64 +28,54 @@
 
       - 也可以在postman官网安装postman app进行使用
 
-    ```
-    /* Node.js 处理http请求的综合demo */
-    const http = require('http'),
-      querystring = require('querystring');
+-----------------------------
 
-    http.createServer((req, res) => {
+```
+/**
+  * Node.js处理Http请求的综合Demo
+  * Node.js符合CommonJs模块化规范
+  */
 
-      // 数据格式
-      console.log('content-type: ', req.headers['content-type']);
+const http = require('http'),
+  querystring = require('querystring');
 
-      const method = req.method,
-        url = req.url,
-        path = url.split('?')[0],
-        query = querystring.parse(url.split('?')[1]);
+http.createServer((req, res) => {
 
-      // 设置返回字符串的格式为json
-      res.setHeader('Content-type', 'application/json');
+  // 数据格式
+  console.log('content-type: ', req.headers['content-type']);
 
-      // 返回数据
-      const resData = {
-        method,
-        url,
-        path,
-        query,
-      }
+  const method = req.method,
+    url = req.url,
+    path = url.split('?')[0],
+    query = querystring.parse(url.split('?')[1]);
 
-      // 返回数据
-      if (method === 'GET') {
-        res.end(JSON.stringify(resData));
-      }
-      if (method === 'POST') {
-        let postData = '';
-        req.on('data', chunk => {
-          postData += chunk;
-        });
-        req.on('end', () => {
-          resData.postData = postData;
-          res.end(JSON.stringify(resData));
-        });
-      }
+  // 设置返回字符串的格式为json
+  res.setHeader('Content-type', 'application/json');
 
-    }).listen(3000, () => {
-      console.log('running at port 3000.');
+  // 返回数据
+  const resData = {
+    method,
+    url,
+    path,
+    query,
+  }
+
+  // 返回数据
+  if (method === 'GET') {
+    res.end(JSON.stringify(resData));
+  }
+  if (method === 'POST') {
+    let postData = '';
+    req.on('data', chunk => {
+      postData += chunk;
     });
-    ```
+    req.on('end', () => {
+      resData.postData = postData;
+      res.end(JSON.stringify(resData));
+    });
+  }
 
-- 搭建开发环境
-
-  - 从0开始搭建 , 不使用任何框架
-
-  - 使用nodemon检测文件变化 , 自动重启node
-
-  - 使用cross-env设置环境变量
-
-- 开发路由/接口( 暂时不连接数据库, 暂时不考虑登录功能 )
-
-  - 初始化路由: 根据之前技术方案的设计 , 做出路由
-
-  - 返回假数据: 将路由和数据处理分离 , 以符合设计原则
-
-  - 由于后端接收post请求的data时, 是以数据流的方式异步接收, 所以我采用Promise的方式处理异步操作
+}).listen(3000, () => {
+  console.log('running at port 3000.');
+});
+```

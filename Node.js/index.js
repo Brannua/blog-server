@@ -1,4 +1,3 @@
-/* env: process.env.NODE_ENV */
 
 const handleBlogRouter = require('./src/router/blog'),
   handleUserRouter = require('./src/router/user'),
