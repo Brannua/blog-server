@@ -78,18 +78,29 @@
     - 核心 : 登录校验 && 登录信息存储
 
     - cookie的特点
+
       - 最大5kb
+
       - 字符串类型
+
       - 形如k1=v1;k2=v2;k3=v3;
+
       - 存储于浏览器
+
       - 跨域不共享
+
       - 前端每次发送http请求，都会将请求域的cookie一起发送给server( 比如百度请求淘宝，百度就会发送淘宝的cookie )
+
       - 浏览器查看cookie的三种方式 : 1.Application/Storage/Cookies 2.Network/Headers 3.document.cookie
 
     - server端nodejs操作cookie实现登录验证
+
       - 首先前端调用/api/user/login接口进行登录
+
       - 然后后端接收到登录请求，解析出用户名密码和数据库校验通过登陆成功后，向前端设置cookie
+
       - 当前端向验证登录的接口发送请求就会携带cookie，后端接收到cookie就可以根据cookie中的值判断是否已经登录
+
       ```
         /**
          * 登陆成功后后端给前端设置cookie示例如下
@@ -106,7 +117,36 @@
         res.setHeader('Set-Cookie', `username=${data.username}; path=/; httpOnly; expires=${_getCookieExpires()}`);
       ```
 
-    - session && session写入内存数据库redis
+      - 单纯使用cookie实现登录验证有两处不足如下
 
-    - 开发登录功能 && 使用nginx反向代理和前端联调
+        - 不能在cookie中存放十分重要的用户信息，否则会泄露用户个人信息
 
+        - cookie的可存储数据量十分有限，最大5kb
+
+      - 解决方案 : session
+
+        - 默认不需要给客户端种植包含用户唯一标识(userId)的cookie ```let needSetCookie = false;```
+
+        - server端尝试获取cookie中的userId，再尝试依据此userId从server端session中获取用户信息的思路
+
+          - 如果从cookie中解析出userId( 非首次访问且cookie未过期 )
+
+            - 如果没获取到```session[userId]```中的数据，则初始化```session[userId]```为{}( 尚未登录 )
+
+          - 如果从cookie中没有解析出userId( 首次访问或cookie已过期 )
+          
+            - 将needSetCookie设置为true，在命中接口向前端返回数据的前一刻向前端种植包含userId的cookie
+            
+            - 创建唯一标识userId( 用来给客户端种植cookie )
+
+            - 初始化```session[userId]```为{}( 尚未登录 )
+
+          - 最后将```session[userId]```挂到req.session上
+
+          - 如果是未登录的状态，那么在调用登录接口登陆成功的回调函数中将用户信息保存到req.session中
+
+    - session写入内存数据库redis
+
+    - 开发登录功能
+    
+    - 配置nginx反向代理和前端联调

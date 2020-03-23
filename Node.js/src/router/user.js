@@ -5,13 +5,6 @@ const {
   ErrorModel
 } = require('../model/resModel');
 
-// 辅助函数 : 获取cookie的过期时间
-const _getCookieExpires = () => {
-  const d = new Date();
-  d.setTime(d.getTime() + (24 * 60 * 60 * 1000));
-  return d.toGMTString();
-}
-
 const handleUserRouter = (req, res) => {
   const method = req.method,
     path = req.path;
@@ -21,7 +14,11 @@ const handleUserRouter = (req, res) => {
     const { username, password } = req.body;
     return login(username, password).then(data => {
       if (data.username) {
-        res.setHeader('Set-Cookie', `username=${data.username}; path=/; httpOnly; expires=${_getCookieExpires()}`);
+
+        // 成功登录则将用户信息保存到session中
+        req.session.username = data.username;
+        req.session.realname = data.realname;
+
         return new SuccessModel();
       } else {
         return new ErrorModel('登录失败');
@@ -31,9 +28,9 @@ const handleUserRouter = (req, res) => {
 
   // 测试接口代码 : 登录验证
   if (method === 'GET' && path === '/api/user/login-test') {
-    if (req.cookie.username) {
+    if (req.session.username) {
       return Promise.resolve(new SuccessModel({
-        username: req.cookie.username
+        session: req.session
       }));
     }
     return Promise.resolve(new ErrorModel('尚未登录'));
