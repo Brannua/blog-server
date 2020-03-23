@@ -1,28 +1,28 @@
 /**
- * Mysql的配置模块( 根据NODE_ENV环境区分配置 )
+ * Mysql的配置模块
+ * 使用cross-env包在package.json中配置环境参数
  */
 
-// 获取环境参数
-const env = process.env.NODE_ENV
-
+// 获取环境参数用来区分mysql配置
+const env = process.env.NODE_ENV;
 let MYSQL_CONFIG = null;
 
 if (env === 'dev') {
   MYSQL_CONFIG = {
-    host: 'localhost',
+    host: '127.0.0.1',
     user: 'root',
-    password: '',
-    post: '3306',
+    password: 'lpj374453156....',
+    port: '3306',
     database: 'myblog'
   }
 }
 
 if (env === 'production') {
   MYSQL_CONFIG = {
-    host: 'localhost',
+    host: '127.0.0.1',
     user: 'root',
-    password: '',
-    post: '3306',
+    password: 'lpj374453156....',
+    port: '3306',
     database: 'myblog'
   }
 }

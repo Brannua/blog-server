@@ -34,10 +34,27 @@ const _getPostData = (req) => {
 const serverHandel = (req, res) => {
   // 设置返回字符串数据的格式为json
   res.setHeader('Content-type', 'application/json');
+
   // 解析出请求的路由并挂到req上
   req.path = req.url.split('?')[0];
+
   // 解析出GET请求的参数挂到req上
   req.query = querystring.parse(req.url.split('?')[1]);
+
+  // 解析出请求携带的cookie挂到req上
+  req.cookie = {};
+  const cookieStr = req.headers.cookie || '';
+  cookieStr.split(';').forEach(item => {
+    if (!item) {
+      return;
+    }
+    var arr = item.split('='),
+      key = arr[0].trim(),
+      val = arr[1].trim();
+    // console.log(key, val);
+    req.cookie[key] = val;
+  });
+
   // 使用Promise的方式处理异步接收post请求发送过来的数据
   _getPostData(req).then(postData => {
     // POST请求的数据挂到req上
@@ -69,8 +86,8 @@ const serverHandel = (req, res) => {
     });
     res.write('404 Not Found\n');
     res.end();
-  })
 
+  });
 }
 
 module.exports = serverHandel;

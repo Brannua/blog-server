@@ -36,7 +36,7 @@ const handleBlogRouter = (req, res) => {
   // 新建一篇博客
   if (method === 'POST' && path === '/api/blog/new') {
     const blogData = req.body;
-    blogData.author = 'zhangsan'; // 假作者,待开发登录功能时再修改
+    blogData.author = 'lisi'; // 假作者,待开发登录功能时再修改
     return newBlog(blogData).then(data => {
       return new SuccessModel(data);
     });
