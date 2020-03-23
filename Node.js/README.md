@@ -31,13 +31,25 @@
     | 删除一篇博客       | /api/blog/del    | post | id                            |                          |
     | 登录               | /api/user/login  | post |                               | postData中有用户名和密码 |
 
-  - Mysql数据存储( 关系型硬盘数据库 )
+  - 数据存储( 关系型硬盘数据库 )
 
-    - [Mysql下载链接](https://dev.mysql.com/downloads/mysql/)
+    - 考虑网站数据的特点
+
+      - 操作频率不是很高
+
+      - 断电不能丢失
+
+      - 数据量大，内存条成本高
+
+      - Mysql被广泛使用且符合需求
+
+    - 所以采用Mysql数据库
+
+    - [Mysql下载方式记录](https://blog.csdn.net/Brannua/article/details/105014296)
+
+    - [SQL语句的基本操作记录](https://blog.csdn.net/Brannua/article/details/104652438)
 
     - [Workbench下载链接](https://dev.mysql.com/downloads/workbench/)
-
-    - [SQL语句的的基本使用](https://blog.csdn.net/Brannua/article/details/104652438)
 
     - user表的设计 ( 密码可进行加密处理 )
 
@@ -145,7 +157,27 @@
 
           - 如果是未登录的状态，那么在调用登录接口登陆成功的回调函数中将用户信息保存到req.session中
 
-    - session写入内存数据库redis
+      - 但当前session是一个js变量，存放在nodejs进程中，会有如下问题
+
+        - 进程内存有限，访问量过大，内存暴增是个问题
+
+        - 项目正式上线运行是多进程，进程之间内存无法共享
+
+      - 考虑session的特点
+
+        - session放在index.js所有访问的入口中，访问频繁，对性能要求极高
+
+        - session可以不考虑断电丢失数据的问题
+
+        - session数据量不会很大
+
+      - 所以将session拆分到redis中解决上面的问题
+
+        - web server最常用的缓存数据库，数据存放在内存中
+
+        - 内存读写速度快，但价格昂贵，且数据非持久化保存( 断电丢失 )
+
+        - 将web server、redis、mysql拆分成三个单独的服务，三方都是独立的，都是可扩展的( 例如都可扩展为集群 )
 
     - 开发登录功能
     
