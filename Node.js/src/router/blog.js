@@ -11,6 +11,14 @@ const {
   ErrorModel
 } = require('../model/resModel');
 
+// 辅助函数 : 登录验证，用于拦截未登录的用户
+const _loginCheck = (req) => {
+  if (!req.session.username) {
+    return Promise.resolve(
+      new ErrorModel('尚未登录')
+    );
+  }
+}
 
 const handleBlogRouter = (req, res) => {
   const method = req.method,
@@ -35,8 +43,16 @@ const handleBlogRouter = (req, res) => {
 
   // 新建一篇博客
   if (method === 'POST' && path === '/api/blog/new') {
+
+    // 拦截未登录用户
+    const loginCheckResult = _loginCheck(req);
+    if (loginCheckResult) {
+      // 未登录
+      return loginCheckResult;
+    }
+
     const blogData = req.body;
-    blogData.author = 'lisi'; // 假作者,待开发登录功能时再修改
+    blogData.author = req.session.username;
     return newBlog(blogData).then(data => {
       return new SuccessModel(data);
     });
@@ -44,7 +60,16 @@ const handleBlogRouter = (req, res) => {
 
   // 更新一篇博客
   if (method === 'POST' && path === '/api/blog/update') {
+
+    // 拦截未登录用户
+    const loginCheckResult = _loginCheck(req);
+    if (loginCheckResult) {
+      // 未登录
+      return loginCheckResult;
+    }
+
     const blogData = req.body;
+    // 这里仅仅使用前端传来的id就可更新博客，是个漏洞，
     return updateBlog(id, blogData).then(value => {
       if (value) {
         return new SuccessModel();
@@ -56,7 +81,16 @@ const handleBlogRouter = (req, res) => {
 
   // 删除一篇博客
   if (method === 'POST' && path === '/api/blog/del') {
-    const author = 'zhangsan'; // 假作者,待开发登录功能时再修改
+
+    // 拦截未登录用户
+    const loginCheckResult = _loginCheck(req);
+    if (loginCheckResult) {
+      // 未登录
+      return loginCheckResult;
+    }
+
+    const author = req.session.username;
+    // 这里需要前端传来的id和后端从session中获取的作者名做删除校验，更安全
     return delBlog(id, author).then(val => {
       if (val) {
         return new SuccessModel();
