@@ -173,9 +173,9 @@
 
       - 所以将session拆分到redis中解决上面的问题
 
-        - web server最常用的缓存数据库，数据存放在内存中
+        - [redis基本操作 & nodejs连接redis总结](https://blog.csdn.net/Brannua/article/details/105068265)
 
-        - 内存读写速度快，但价格昂贵，且数据非持久化保存( 断电丢失 )
+        - redis将数据存放在内存中，内存的读写速度快，但价格昂贵，且数据非持久化保存( 断电丢失 )
 
         - 将web server、redis、mysql拆分成三个单独的服务，三方都是独立的，都是可扩展的( 例如都可扩展为集群 )
 

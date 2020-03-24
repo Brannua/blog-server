@@ -2,8 +2,8 @@
  * 封装Node.js连接Mysql的模块
  */
 
-const MYSQL_CONFIG = require('../config/db'),
-  mysql = require('mysql'),
+const mysql = require('mysql'),
+  { MYSQL_CONFIG } = require('../config/db'),
   connection = mysql.createConnection(MYSQL_CONFIG);
 
 // 开始连接
