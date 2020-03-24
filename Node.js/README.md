@@ -1,5 +1,28 @@
 # 博客项目后端部分
 
+- 快速启动项目
+
+  ```
+  #安装依赖
+  cd Node.js
+  npm install
+
+  # 开启后端项目
+  npm run dev
+
+  # 开启前端项目
+  cd html-test
+  http-server -p 8001
+
+  # 查看和配置nginx的配置
+  cd /usr/local/nginx/conf
+  vim nginx.conf
+
+  # 开启nginx反向代理
+  cd ../sbin
+  sudo ./nginx
+  ```
+
 > Tips : 本次秉着学习的目的 , 并没有将技术方案设计地十分详尽 , 实际工作开发中需要更加详尽的技术方案
 
 - 需求 : 开发博客系统的基本功能
@@ -179,4 +202,60 @@
 
         - 将web server、redis、mysql拆分成三个单独的服务，三方都是独立的，都是可扩展的( 例如都可扩展为集群 )
 
-    - 配置nginx反向代理和前端联调
+    - 和前端联调
+
+      - 登录功能依赖cookie，需要使用浏览器来联调
+
+      - 前端项目在开发阶段的运行依赖
+      
+        ```
+        npm install http-server -g
+
+        http-server -p 8001
+        ```
+
+      - 此时前端项目运行在8001端口，后端项目运行在8000端口，存在跨域无法共享cookie的问题
+
+      - nginx概述
+
+        - 高性能web服务器，开源免费
+
+        - 反向代理
+
+        - 一般用于做静态服务和负载均衡( 本项目未使用到 )
+
+      - 所以本项目配置nginx反向代理，让前后端监听同一端口( 8800 )同域联调
+
+        - 比如http://localhost:8800/index.html会被代理到http://localhost:8001/index.html
+
+        - 比如http://localhost:8800/api/blog/list会被代理到http://localhost:8000/api/blog/list
+
+        - 安装nginx参考 : [CSDN博客](https://blog.csdn.net/CSDN_FlyYoung/article/details/94591864)
+
+        ```
+          修改nginx配置反向代理
+
+          worker_processes <主机核心数>;
+
+          location / {
+              proxy_pass http://localhost:8001;
+          }
+
+          location /api/ {
+              proxy_pass http://localhost:8000;
+              proxy_set_header Host $host; 
+          }
+        ```
+
+        ```
+          - 测试配置文件格式是否正确 : nginx -t
+
+          - 启动 nginx 
+
+          - 重启 nginx -s reload
+
+          - 停止 nginx -s stop
+        ```
+
+      
+        
