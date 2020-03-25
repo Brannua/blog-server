@@ -1,122 +1,239 @@
-# 从浏览器输入URL到显示页面的整个流程
+# 以博客项目为例学习后端开发的必备知识
 
-- 域名经过DNS解析成ip地址 , ip地址对应一台服务器 , 客户端与服务器之间建立TCP链接( 三次握手 ) , 客户端发送http请求
+> Tips : 本次秉着学习的目的 , 并没有将技术方案设计地十分详尽 , 实际工作开发中需要更加详尽的技术方案
 
-- server端接收到http请求 , 处理并返回
+- [学习Node.js开发server端的前置知识](https://blog.csdn.net/Brannua/article/details/105087923)
 
-- 客户端接收到返回数据再处理数据( 如页面渲染 , 执行js )
+- 快速启动项目
 
-# server开发和前端开发的区别
+  ```
+  # 开启nginx反向代理
+  cd /usr/local/nginx/sbin
+  sudo ./nginx
 
-- 服务稳定性
+  # 开启后端项目
+  cd server
+  npm install
+  npm run dev
 
-  - server端可能会遭受各种恶意攻击和误操作
+  # 前端用来测试
+  cd html-test
+  npm install
+  npm run dev
 
-  - 单个客户端可以意外挂掉 , 但是服务端不能
+  # 测试预览
+  默认预览 : http://localhost:8800/index.html
+  可自定义nginx代理端口进行预览 : http://localhost:<nginx代理端口>/index.html
+  ```
 
-  - 本次学习使用PM2做进程守护( 进程一旦挂掉就会自动重启而不用人工干预 )
+- 需求 : 博客系统基本功能的后端部分
 
-- 考虑内存和CPU( 优化、扩展 )
+  - 登录功能 : 登录页
 
-  - 客户端独占一个浏览器 , 内存和CPU都不是问题
+  - 获取博客列表功能 : 首页 + 作者主页 + 搜索框
 
-  - server端要承载很多请求 , CPU和内存都是稀缺资源
+  - 查看博客详情 : 博客详情页
 
-  - 本次学习使用stream记录日志 , 这种记录日志的方法十分解决CPU和内存 , 是一种优化方案
-  
-  - 本次学习使用redis存储session , 是扩展server端承载能力的一种方法
+  - 撰写博客功能 : 新建页
 
-- 日志记录
+  - 更新博客功能 : 编辑页
 
-  - 前端会参与写日志 , 但只是日志的发起方 , 不关心后续
+  - 删除博客功能 : 删除按钮
 
-  - server端要
-    - 记录日志
-    - 存储日志
-    - 分析日志
+- 技术方案
 
-  - 本次学习了多种记录日志的方法 , 也学习了如何分析日志
+  - 接口设计( 原则 : 路由和数据处理分离 )
 
-- 安全
+    | 描述         | 接口             | 方法 | 参数                          | 备注                     |
+    | :----------- | :--------------- | :--- | :---------------------------- | :----------------------- |
+    | 登录         | /api/user/login  | post |                               | postData中有用户名和密码 |
+    | 获取博客列表 | /api/blog/list   | get  | author作者, keyword搜索关键字 | 参数为空则不进行查询过滤 |
+    | 查看博客详情 | /api/blog/detail | get  | id                            |                          |
+    | 新增一篇博客 | /api/blog/new    | post |                               | post中有新增的信息       |
+    | 更新一篇博客 | /api/blog/update | post | id                            | postData中有更新的内容   |
+    | 删除一篇博客 | /api/blog/del    | post | id                            |                          |
 
-  - server端要随时准备接收各种恶意攻击 , 前端则少很多 , 如越权操作、数据库攻击等
+  - 数据存储( 考虑网站数据的特点 )
 
-  - 本次学习了登录验证、预防XSS攻击和sql注入
+    - 数据量很大内存条成本高
 
-- 集群和服务拆分
+    - 数据需要被持久化保存
 
-  - 如果产品发展速度快 , 流量会迅速增加 , 就需要考虑通过扩展机器和服务拆分的方式承载大流量
+    - 数据被操作的频率不是很高
 
-  - 本次学习是单机开发 , 但是从设计上支持服务拆分
+    - [关系型硬盘数据库Mysql的下载方式](https://blog.csdn.net/Brannua/article/details/105014296)
 
-# 原生Node.js开发接口接收并处理http请求的方式
+    - [SQL语句的基本操作](https://blog.csdn.net/Brannua/article/details/104652438)
 
-- get请求和querystring  
+    - user表的设计 ( 密码可进行加密处理 )
 
-  - 即客户端要向server端获取数据 , 如查询博客列表
+      | column   | datatype    | pk主键 | nn不为空 | ai自动增加 | Default |
+      | :------- | :---------- | :----- | :------- | :--------- | :------ |
+      | id       | int         | Y      | Y        | Y          |         |
+      | username | varchar(20) |        | Y        |            |         |
+      | password | varchar(20) |        | Y        |            |         |
+      | realname | varchar(10) |        | Y        |            |         |
 
-  - 通过querystring来传递数据 , 如a.html?a=100&b=200
+    - blogs表的设计
 
-  - 浏览器直接访问就发送get请求
+      | column     | datatype    | pk主键 | nn不为空 | ai自动增加 | Default |
+      | :--------- | :---------- | :----- | :------- | :--------- | :------ |
+      | id         | int         | Y      | Y        | Y          |         |
+      | title      | varchar(50) |        | Y        |            |         |
+      | content    | longtext    |        | Y        |            |         |
+      | createtime | bigint(20)  |        | Y        |            | 0       |
+      | author     | varchar(20) |        | Y        |            |         |
 
-- post请求
+    - 当controller中拼接sql语句, 参数不确定导致查询条件不确定的时候, 为了防止拼接的sql语句的格式异常导致报错, 我采用 ```where 1=1``` 的小技巧
 
-  - post请求即客户端要向服务端传递数据 , 如新建博客
+      ```
+        const getList = (author, keyword) => {
+          let sql = 'select * from blogs where 1=1';
+          if (author) {
+            sql += ` and author='${author}'`;
+          }
+          if (keyword) {
+            sql += ` and title like '%${keyword}%'`;
+          }
+          // ...
+        }
+      ```
 
-  - 本次学习中通过自定义的postData传递数据
+  - 登录功能( 登录信息存储 &&　登录校验 )
 
-  - 浏览器无法直接模拟 , 可以使用postman模拟
+    - cookie的特点
 
-    - 可以选择安装postman谷歌插件 , 小巧轻量 , 搜索postman chrome crx就会出现安装教程
+      - 存储于浏览器的结构化字符串，最大５kb，跨域不共享
 
-    - 也可以在postman官网安装postman app进行使用
+      - 浏览器查看cookie的三种方式 : 1.Application/Storage/Cookies 2.Network/Headers 3.document.cookie
 
-```
-  /**
-  * Node.js处理Http请求的综合Demo
-  * Node.js符合CommonJs模块化规范
-  */
+      - 前端每次发送http请求，都会将请求域的cookie一起发送给server( 比如百度请求淘宝，百度就会发送淘宝的cookie )
 
-  const http = require('http'),
-    querystring = require('querystring');
+    - server端nodejs操作cookie实现登录验证的大致思路如下
 
-  http.createServer((req, res) => {
+      - 首先前端调用/api/user/login接口进行登录
 
-    // 数据格式
-    console.log('content-type: ', req.headers['content-type']);
+      - 当后端接收到登录请求，就会从请求的参数中解析出用户名和密码，和数据库校验通过登陆成功后，后端向前端设置cookie
 
-    const method = req.method,
-      url = req.url,
-      path = url.split('?')[0],
-      query = querystring.parse(url.split('?')[1]);
+      - 当前端向验证登录的接口发送请求时就会携带cookie，后端接收到cookie就可以根据cookie中的数据判断登录状态
 
-    // 设置返回字符串的格式为json
-    res.setHeader('Content-type', 'application/json');
+      ```
+        // 辅助函数 : 获取cookie的过期时间
+        const _getCookieExpires = () => {
+          const d = new Date();
+          d.setTime(d.getTime() + (24 * 60 * 60 * 1000));
+          return d.toGMTString();
+        }
+        /**后端给前端设置cookie的演示示例
+         * path=/ : 让前端项目的所有页面都是登录状态
+         * httpOnly : 不允许前端通过js修改该cookie
+         * expires : cookie的过期时间
+         */    
+        res.setHeader('Set-Cookie', `username=${data.username}; path=/; httpOnly; expires=${_getCookieExpires()}`);
+      ```
 
-    // 返回数据
-    const resData = {
-      method,
-      url,
-      path,
-      query,
-    }
+      - 只使用cookie实现登录验证有两处不足
 
-    // 返回数据
-    if (method === 'GET') {
-      res.end(JSON.stringify(resData));
-    }
-    if (method === 'POST') {
-      let postData = '';
-      req.on('data', chunk => {
-        postData += chunk;
-      });
-      req.on('end', () => {
-        resData.postData = postData;
-        res.end(JSON.stringify(resData));
-      });
-    }
+        - cookie的可存储数据量十分有限，最大5kb
 
-  }).listen(3000, () => {
-    console.log('running at port 3000.');
-  });
-```
+        - 不能在cookie中存放十分重要的用户信息，否则会泄露用户个人信息
+
+      - 使用session的方式解决如上两处不足的思路
+
+        - 浏览器端cookie中包含用户唯一标识userId
+
+        - 用户信息保存到server端的session中
+
+        - 默认不需要给客户端设置cookie ```let needSetCookie = false```
+
+        - server端尝试获取cookie中的userId
+
+          - 如果从cookie中解析出userId，再尝试依据此userId从session中获取用户信息
+
+            - 如果未从session中获取到用户信息，则初始化```session[userId]```为空对象
+
+          - 如果从cookie中没有解析出userId
+            
+            - needSetCookie设置为true　＆　生成唯一标识userId　＆　初始化```session[userId]```为空对象
+
+            - 请求命中接口向前端返回数据的前一刻向前端设置包含userId的cookie
+
+        - 将```session[userId]```挂到req.session上
+
+        - 调用登录接口登陆成功的回调函数中将用户信息保存到req.session中
+
+      - 但此时session只是一个存放在nodejs进程中的js变量，会有如下缺陷
+
+        - 进程内存有限，如果访问量过大内存暴增，进程容易挂掉
+
+        - 项目正式上线是多进程运行，进程之间内存无法共享
+
+      - 考虑session的特点
+
+        - session数据量不会很大
+
+        - session数据的丢失只需要登录以下就可以恢复，可以不用持久化保存
+
+        - session放在所有访问的入口中( index.js )，被访问频繁，对性能要求极高
+
+      - 解决缺陷的方案 : 将session存储于redis，以拆分成独立服务
+
+        - [redis基本操作 & nodejs连接redis总结](https://blog.csdn.net/Brannua/article/details/105068265)
+
+        - redis将数据存放在内存中，内存的读写速度快，价格昂贵，数据非持久化保存
+
+        - 将server、redis、mysql拆分成三个独立的服务，均可扩展( 例如都可扩展为集群 )
+
+    - 和前端联调
+
+      - 登录功能依赖cookie，需要使用浏览器
+
+      - 前后端运行在不同端口，存在跨域无法共享cookie的问题
+
+      - nginx : 高性能web服务器，开源免费，一般用于做静态服务和负载均衡( 本项目未使用到 )
+
+      - 本项目使用nginx配置反向代理，让前后端监听同一端口实现同域联调
+
+        - 比如http://localhost:8800/index.html会被代理到http://localhost:8001/index.html
+
+        - 比如http://localhost:8800/api/blog/list会被代理到http://localhost:8000/api/blog/list
+
+        - 安装nginx参考 : [CSDN博客](https://blog.csdn.net/CSDN_FlyYoung/article/details/94591864)
+
+        ```
+          # 启动
+
+          nginx
+
+          # 测试配置文件格式是否正确
+
+          nginx -t
+
+          # 重启
+
+          nginx -s reload
+
+          # 停止
+
+          nginx -s stop
+        ```
+        ```
+          # 查看和配置nginx的配置
+
+          cd /usr/local/nginx/conf
+
+          vim nginx.conf
+
+          # 修改nginx配置反向代理
+
+          worker_processes <主机核心数>;
+
+          location / {
+              proxy_pass http://localhost:8001;
+          }
+
+          location /api/ {
+              proxy_pass http://localhost:8000;
+              proxy_set_header Host $host; 
+          }
+        ```

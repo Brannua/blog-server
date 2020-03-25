@@ -17,7 +17,5 @@
     "nodemon": "^2.0.2",
     "redis": "^3.0.2"
   },
-  "devDependencies": {
-    "http-server": "^0.12.1"
-  }
+  "devDependencies": {}
 }
