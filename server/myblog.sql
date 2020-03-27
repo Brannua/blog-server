@@ -19,4 +19,4 @@ INSERT INTO `myblog`.`users` (`id`, `username`, `password`, `realname`) VALUES (
 INSERT INTO `myblog`.`users` (`id`, `username`, `password`, `realname`) VALUES ('2', 'lisi', '123', '李四');
 
 INSERT INTO `myblog`.`blogs` (`title`, `content`, `createtime`, `author`) VALUES ('标题1', '内容1', '1584890448981', 'zhangsan');
-INSERT INTO `myblog`.`users` (`id`, `username`, `password`, `realname`) VALUES ('标题2', '内容2', '1584890527714', 'lisi');
+INSERT INTO `myblog`.`blogs` (`title`, `content`, `createtime`, `author`) VALUES ('标题2', '内容2', '1584890527714', 'lisi');
