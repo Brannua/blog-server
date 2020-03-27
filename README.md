@@ -237,3 +237,17 @@
               proxy_set_header Host $host; 
           }
         ```
+
+  - 日志记录
+
+    - 日志不需要表结构 & 不涉及级联查询等复杂场景 & 文件方便共享
+
+    - 所以日志存储于文件 : [Node.js文件操作基础点此](https://blog.csdn.net/Brannua/article/details/105139779)
+
+      - 访问日志 access log，是server端最重要的日志
+
+      - 自定义日志，包括自定义事件，错误记录等
+
+    - [使用stream的方式进行服务端文件操作的原因点此](https://blog.csdn.net/Brannua/article/details/105141050)
+    
+    
