@@ -34,15 +34,17 @@
 
     - [SQL语句的基本操作](https://blog.csdn.net/Brannua/article/details/104652438)
 
+    - [Node.js连接Mysql基本操作](https://blog.csdn.net/Brannua/article/details/104655696)
+
   - [登录功能](https://blog.csdn.net/Brannua/article/details/105157696)
 
     - [redis基本操作 & nodejs连接redis总结](https://blog.csdn.net/Brannua/article/details/105068265)
 
-  - [配置nginx反向代理和前端同域联调](https://blog.csdn.net/Brannua/article/details/105156821)  
+  - [配置nginx反向代理和前端同域联调](https://blog.csdn.net/Brannua/article/details/105156821)
 
   - [日志记录](https://blog.csdn.net/Brannua/article/details/105166088)
 
     - [Node.js文件操作基础](https://blog.csdn.net/Brannua/article/details/105139779)
 
-    - [使用stream的方式进行服务端文件操作的原因](https://blog.csdn.net/Brannua/article/details/105141050)
+    - [使用stream的方式进行服务端文件操作的原因和demo](https://blog.csdn.net/Brannua/article/details/105141050)
     
