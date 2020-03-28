@@ -1,7 +1,8 @@
-const handleBlogRouter = require('./src/router/blog'),
+const qs = require('querystring'),
+  handleBlogRouter = require('./src/router/blog'),
   handleUserRouter = require('./src/router/user'),
-  querystring = require('querystring'),
   { getVal, setVal } = require('./src/db/redis'),
+  { access } = require('./src/utils/log'),
   emptyObject = {};
 
 // 辅助函数 : 获取cookie的过期时间， 用在给客户端种植cookie时
@@ -41,12 +42,16 @@ const _getPostData = (req) => {
 }
 
 const serverHandel = (req, res) => {
+
+  // 写访问日志
+  access(`${req.method} -- ${req.url} -- ${req.headers['user-agent']} -- ${Date.now()}`);
+
   // 设置返回字符串数据的格式为json
   res.setHeader('Content-type', 'application/json');
   // 解析出请求的路由并挂到req上
   req.path = req.url.split('?')[0];
   // 解析出GET请求的参数挂到req上
-  req.query = querystring.parse(req.url.split('?')[1]);
+  req.query = qs.parse(req.url.split('?')[1]);
 
   // 尝试解析出cookie挂到req上
   req.cookie = emptyObject;
