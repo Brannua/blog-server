@@ -1,4 +1,5 @@
-const execSQL = require('../db/mysql');
+const {execSQL} = require('../db/mysql');
+const xss = require('xss');
 
 // author和keyword都可用于条件查询 , 不定参
 const getList = (author, keyword) => {
@@ -22,7 +23,7 @@ const getDetail = (id) => {
 }
 
 const newBlog = (blogData = {}) => {
-  const title = blogData.title,
+  const title = xss(blogData.title),
     content = blogData.content,
     createtime = Date.now(),
     author = blogData.author;

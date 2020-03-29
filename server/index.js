@@ -72,7 +72,6 @@ const serverHandel = (req, res) => {
     userId = `${Date.now()}_${Math.random()}`;
     setVal(userId, emptyObject);
   }
-  // 从redis中获取session
   getVal(userId).then(sessionData => {
     if (sessionData === null) {
       setVal(userId, emptyObject);

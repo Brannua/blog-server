@@ -1,3 +1,7 @@
+/**
+ * 分析日志模块
+*/
+
 const fs = require('fs');
 const path = require('path');
 const readline = require('readline');

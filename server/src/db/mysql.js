@@ -23,4 +23,7 @@ function execSQL(sql) {
   });
 }
 
-module.exports = execSQL;
+module.exports = {
+  execSQL,
+  escape: mysql.escape,
+};
