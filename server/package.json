@@ -2,7 +2,7 @@
   "name": "Node.js",
   "version": "1.0.0",
   "description": "原生Node.js开发博客项目 , 主攻server端",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=dev nodemon ./bin/www.js",
     "prd": "cross-env NODE_ENV=production nodemon ./bin/www.js",
