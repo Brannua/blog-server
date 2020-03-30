@@ -46,13 +46,6 @@ const serverHandel = (req, res) => {
   // 写访问日志
   access(`${req.method} -- ${req.url} -- ${req.headers['user-agent']} -- ${Date.now()}`);
 
-  // 设置返回字符串数据的格式为json
-  res.setHeader('Content-type', 'application/json');
-  // 解析出请求的路由并挂到req上
-  req.path = req.url.split('?')[0];
-  // 解析出GET请求的参数挂到req上
-  req.query = qs.parse(req.url.split('?')[1]);
-
   // 尝试解析出cookie挂到req上
   req.cookie = emptyObject;
   const cookieStr = req.headers.cookie || '';
@@ -82,6 +75,12 @@ const serverHandel = (req, res) => {
     return _getPostData(req);
   })
     .then(postData => {
+      // 设置返回字符串数据的格式为json
+      res.setHeader('Content-type', 'application/json');
+      // 解析出请求的路由并挂到req上
+      req.path = req.url.split('?')[0];
+      // 解析出GET请求的参数挂到req上
+      req.query = qs.parse(req.url.split('?')[1]);
       // 将POST请求发送过来的数据挂到req上
       req.body = postData;
 
