@@ -7,14 +7,12 @@ const {
   newBlog,
   updateBlog,
   delBlog
-} = require('../controller/blog');
-
-const {
+} = require('../controller/blog'), {
   SuccessModel,
   ErrorModel
 } = require('../model/resModel');
 
-router.get('/list', (req, res, next) => {
+router.get('/list', (req, res) => {
   // express框架自带的工具已经解析好了req.query
   const author = req.query.author || '',
     keyword = req.query.keyword || '';
@@ -30,13 +28,12 @@ router.get('/list', (req, res, next) => {
   //   // 强制查询自己的博客
   //   author = req.session.username;
   // }
-  
+
   const result = getList(author, keyword);
   return result.then(listData => {
     res.json(
       new SuccessModel(listData)
     );
-    next();
   });
 });
 

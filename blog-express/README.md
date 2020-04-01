@@ -40,6 +40,15 @@
 
   - config & db & model & controller & utils
 
-- 初始化路由
+- 登录功能
+
+  - 插件
+    - express.session
+    - connect-redis
+
+  - req.session保存登录信息
+
+  - 登录校验做成中间件
+
 
   
