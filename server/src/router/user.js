@@ -19,6 +19,9 @@ const handleUserRouter = (req, res) => {
         req.session.username = data.username;
         req.session.realname = data.realname;
 
+        // 并将用户信息同步到redis
+        set(req.sessionId, req.session);
+
         return new SuccessModel();
       } else {
         return new ErrorModel('登录失败');

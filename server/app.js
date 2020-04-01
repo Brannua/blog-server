@@ -65,6 +65,7 @@ const serverHandel = (req, res) => {
     userId = `${Date.now()}_${Math.random()}`;
     setVal(userId, emptyObject);
   }
+  req.sessionId = userId;
   getVal(userId).then(sessionData => {
     if (sessionData === null) {
       setVal(userId, emptyObject);
