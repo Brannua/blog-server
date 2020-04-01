@@ -29,6 +29,19 @@ const handleBlogRouter = (req, res) => {
   if (method === 'GET' && path === '/api/blog/list') {
     const author = req.query.author || '',
       keyword = req.query.keyword || '';
+
+    // // 管理员界面( 前端访问路由需要增添isadmin参数 )
+    // if (req.query.isadmin) {
+    //   // 拦截未登录用户
+    //   const loginCheckResult = _loginCheck(req);
+    //   if (loginCheckResult) {
+    //     // 未登录
+    //     return loginCheckResult;
+    //   }
+    //   // 强制查询自己的博客
+    //   author = req.session.username;
+    // }
+
     return getList(author, keyword).then(listData => {
       return new SuccessModel(listData);
     });
