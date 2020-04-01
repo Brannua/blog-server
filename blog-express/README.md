@@ -36,12 +36,10 @@
 
 ### 重构文档
 
-- 安装插件
-
-  - mysql、xss
-
 - 复用代码
 
-  - mysql & controller & resModel 相关
+  - config & db & model & controller & utils
 
 - 初始化路由
+
+  
