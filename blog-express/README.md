@@ -65,3 +65,9 @@
         author = req.session.username;
       }
     ```
+
+- 日志记录
+
+  - access log 记录，使用express脚手架推荐的morgan
+
+  - 自定义日志使用console.log & console.error

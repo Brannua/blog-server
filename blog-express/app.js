@@ -1,6 +1,8 @@
 var express = require('express'),
   app = express(),
   logger = require('morgan'),
+  path = require('path'),
+  fs = require('fs'),
   
   cookieParser = require('cookie-parser'),
   session = require('express-session'),
@@ -15,7 +17,22 @@ var express = require('express'),
 
   createError = require('http-errors');
 
-app.use(logger('dev'));
+// 区分打印日志的运行环境
+const ENV = process.env.NODE_ENV;
+if (ENV !== 'production') {
+  // 开发测试环境 : 默认打印到控制台
+  app.use(logger('dev'));
+} else {
+  // 上线环境 : 使用stream的方式将日志写入文件
+  const logFileName = path.join(__dirname, 'logs', 'access.log');
+  const writeStream = fs.createWriteStream(logFileName, {
+    flags: 'a'
+  });
+  app.use(logger('combined', {
+    stream: writeStream
+  }));
+}
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
