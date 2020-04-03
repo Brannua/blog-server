@@ -6,6 +6,7 @@ const loginCheck = (req, res, next) => {
     res.json(
       new ErrorModel('尚未登录')
     );
+    return;
   }
   next();
 }

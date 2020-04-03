@@ -42,13 +42,26 @@
 
 - 登录功能
 
-  - 插件
-    - express.session
-    - connect-redis
-
-  - req.session保存登录信息
+  - 插件( 中间件的形式 )
+    - express.session : 配置cookie-session实现登录
+    - connect-redis ： 配置req.sesson自动同步redis
 
   - 登录校验做成中间件
 
+    - 管理员页面校验逻辑 ( 代码中没有添加这一块，仅作为学习 )
 
-  
+    ```
+      // 管理员界面( 前端访问路由需要增添isadmin参数 )
+      if (req.query.isadmin) {
+        // 拦截未登录用户
+        if (!req.session.username) {
+          // 未登录
+          res.json(
+            new ErrorModel('未登录')
+          );
+          return;
+        }
+        // 强制查询自己的博客
+        author = req.session.username;
+      }
+    ```
