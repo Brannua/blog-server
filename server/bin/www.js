@@ -1,5 +1,5 @@
 const http = require('http'),
-  serverHandle = require('../index'),
+  serverHandle = require('../app'),
   PORT = 8000;
 
 http.createServer(serverHandle).listen(PORT, () => {

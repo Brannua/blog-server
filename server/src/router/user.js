@@ -3,7 +3,9 @@ const {
 } = require('../controller/user'), {
   SuccessModel,
   ErrorModel
-} = require('../model/resModel');
+} = require('../model/resModel'), {
+  setVal
+} = require('../db/redis');
 
 const handleUserRouter = (req, res) => {
   const method = req.method,
@@ -17,10 +19,10 @@ const handleUserRouter = (req, res) => {
 
         // 成功登录则将用户信息保存到session中
         req.session.username = data.username;
-        req.session.realname = data.realname;
+        req.session.password = data.password;
 
         // 并将用户信息同步到redis
-        set(req.sessionId, req.session);
+        setVal(req.sessionId, req.session);
 
         return new SuccessModel();
       } else {

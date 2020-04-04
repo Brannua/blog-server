@@ -46,6 +46,13 @@ const serverHandel = (req, res) => {
   // 写访问日志
   access(`${req.method} -- ${req.url} -- ${req.headers['user-agent']} -- ${Date.now()}`);
 
+  // 设置返回字符串数据的格式为json
+  res.setHeader('Content-type', 'application/json');
+  // 解析出请求的路由并挂到req上
+  req.path = req.url.split('?')[0];
+  // 解析出GET请求的参数挂到req上
+  req.query = qs.parse(req.url.split('?')[1]);
+
   // 尝试解析出cookie挂到req上
   req.cookie = emptyObject;
   const cookieStr = req.headers.cookie || '';
@@ -57,7 +64,7 @@ const serverHandel = (req, res) => {
     req.cookie[key] = val;
   });
 
-  // 尝试从redis获取session
+  // 尝试获取userId
   let needSetCookie = false;
   let userId = req.cookie.userid;
   if (!userId) {
@@ -65,23 +72,23 @@ const serverHandel = (req, res) => {
     userId = `${Date.now()}_${Math.random()}`;
     setVal(userId, emptyObject);
   }
+
   req.sessionId = userId;
+
+  // 尝试从redis获取session
   getVal(userId).then(sessionData => {
     if (sessionData === null) {
+      // 没登录
       setVal(userId, emptyObject);
       req.session = emptyObject;
     } else {
+      // 已登录
       req.session = sessionData;
     }
     return _getPostData(req);
   })
     .then(postData => {
-      // 设置返回字符串数据的格式为json
-      res.setHeader('Content-type', 'application/json');
-      // 解析出请求的路由并挂到req上
-      req.path = req.url.split('?')[0];
-      // 解析出GET请求的参数挂到req上
-      req.query = qs.parse(req.url.split('?')[1]);
+      
       // 将POST请求发送过来的数据挂到req上
       req.body = postData;
 

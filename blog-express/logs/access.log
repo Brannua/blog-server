@@ -1,8 +1,0 @@
-::1 - - [03/Apr/2020:04:27:52 +0000] "GET /api/blog/list HTTP/1.1" 200 923 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) snap Chromium/80.0.3987.162 Chrome/80.0.3987.162 Safari/537.36"
-::1 - - [03/Apr/2020:04:31:06 +0000] "POST /api/user/login HTTP/1.1" 200 51 "-" "PostmanRuntime/7.24.0"
-::1 - - [03/Apr/2020:04:31:34 +0000] "POST /api/blog/new HTTP/1.1" 200 28 "-" "PostmanRuntime/7.24.0"
-::1 - - [03/Apr/2020:04:31:39 +0000] "GET /api/blog/list HTTP/1.1" 200 1024 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) snap Chromium/80.0.3987.162 Chrome/80.0.3987.162 Safari/537.36"
-::1 - - [03/Apr/2020:04:31:56 +0000] "GET /favicon.ico HTTP/1.1" - - "http://localhost:3000/api/blog/list" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) snap Chromium/80.0.3987.162 Chrome/80.0.3987.162 Safari/537.36"
-::1 - - [03/Apr/2020:04:36:27 +0000] "POST /api/blog/new HTTP/1.1" 200 28 "-" "PostmanRuntime/7.24.0"
-::1 - - [03/Apr/2020:04:36:41 +0000] "GET /api/blog/list HTTP/1.1" 200 305 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) snap Chromium/80.0.3987.162 Chrome/80.0.3987.162 Safari/537.36"
-::1 - - [03/Apr/2020:04:37:58 +0000] "GET /favicon.ico HTTP/1.1" - - "http://localhost:3000/api/blog/list" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) snap Chromium/80.0.3987.162 Chrome/80.0.3987.162 Safari/537.36"
