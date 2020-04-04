@@ -30,6 +30,9 @@
 
     # 自定义的二次开发的运行方式
     npm run dev
+
+    # 自定义的线上环境的运行方式
+    npm run prd
   ```
 
 -------------------
@@ -44,6 +47,7 @@
 
   - 插件( 中间件的形式 )
     - express.session : 配置cookie-session实现登录
+    - redis
     - connect-redis ： 配置req.sesson自动同步redis
 
   - 登录校验做成中间件
