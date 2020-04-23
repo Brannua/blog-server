@@ -1,7 +1,9 @@
-const {
-  execSQL,
-  escape,
-} = require('../db/mysql')
+/**
+ * @description controller user
+ * @author Brannua
+ */
+
+const { execSQL, escape } = require('../db/mysql')
 
 const login = (username, password) => {
   // 预防sql注入攻击

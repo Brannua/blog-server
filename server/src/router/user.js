@@ -1,35 +1,36 @@
-const {
-  login
-} = require('../controller/user'), {
-  SuccessModel,
-  ErrorModel
-} = require('../model/resModel'), {
-  setVal
-} = require('../db/redis');
+/**
+ * @description router user
+ * @author Brannua
+ */
+
+const { login } = require('../controller/user')
+const { SuccessModel, ErrorModel } = require('../model/resModel')
+const { setVal } = require('../db/redis')
 
 const handleUserRouter = (req, res) => {
-  const method = req.method,
-    path = req.path;
+  const path = req.path
+  const method = req.method
 
-  // 登录接口
+  // 用户登录 API
   if (method === 'POST' && path === '/api/user/login') {
-    const { username, password } = req.body;
-    return login(username, password).then(data => {
-      if (data.username) {
 
-        // 成功登录则将用户信息保存到session中
-        req.session.username = data.username;
-        req.session.password = data.password;
+    const { username, password } = req.body
 
-        // 并将用户信息同步到redis
-        setVal(req.sessionId, req.session);
+    return login(username, password)
+      .then(data => {
+        if (data.username) {
 
-        return new SuccessModel();
-      } else {
-        return new ErrorModel('登录失败');
-      }
-    });
+          // 登录成功将用户信息保存到session中
+          req.session.username = data.username
+          req.session.password = data.password
+          // 将用户信息写入redis
+          setVal(req.sessionId, req.session)
+
+          return new SuccessModel()
+        }
+        return new ErrorModel('登录失败')
+      })
   }
 }
 
-module.exports = handleUserRouter;
+module.exports = handleUserRouter

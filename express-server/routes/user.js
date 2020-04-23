@@ -1,16 +1,18 @@
-var express = require('express'),
-  router = express.Router()
+/**
+ * @description router user
+ * @author Brannua
+ */
 
-const {
-  login
-} = require('../controller/user'), {
-  SuccessModel,
-  ErrorModel
-} = require('../model/resModel')
+const express = require('express')
+const router = express.Router()
+const { login } = require('../controller/user')
+const { SuccessModel, ErrorModel } = require('../model/resModel')
 
+// 用户登录 API
 router.post('/login', (req, res) => {
-  const { username, password } = req.body,
-    result = login(username, password)
+  const { username, password } = req.body
+  const result = login(username, password)
+
   return result.then(data => {
     if (data.username) {
       req.session.username = data.username
@@ -30,7 +32,6 @@ router.post('/login', (req, res) => {
       })
     )
   })
-
 })
 
 module.exports = router

@@ -1,5 +1,10 @@
-const {execSQL} = require('../db/mysql')
+/**
+ * @description controller blog
+ * @author Brannua
+ */
+
 const xss = require('xss')
+const {execSQL} = require('../db/mysql')
 
 // author和keyword都可用于条件查询 , 不定参
 const getList = (author, keyword) => {
@@ -51,9 +56,8 @@ const updateBlog = (id, blogData = {}) => {
   return execSQL(sql).then(updateData => {
     if (updateData.affectedRows > 0) {
       return true
-    } else {
-      return false
     }
+    return false
   })
 }
 
@@ -63,9 +67,8 @@ const delBlog = (id, author) => {
   return execSQL(sql).then(delData => {
     if (delData.affectedRows > 0) {
       return true
-    } else {
-      return false
     }
+    return false
   })
 }
 
@@ -74,5 +77,5 @@ module.exports = {
   getDetail,
   newBlog,
   updateBlog,
-  delBlog
+  delBlog,
 }

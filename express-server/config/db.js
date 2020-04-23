@@ -1,5 +1,5 @@
 /**
- * Mysql的配置模块
+ * @description Mysql的配置模块
  * 使用cross-env包在package.json中配置环境参数
  */
 
@@ -9,16 +9,14 @@ let MYSQL_CONFIG = null
 let REDIS_CONFIG = null
 
 if (env === 'dev') {
-  // mysql
   MYSQL_CONFIG = {
     host: '127.0.0.1',
     port: 3306,
     user: 'root',
-    password: 'lpj374453156....',
+    password: '123456',
     database: 'myblog'
   }
 
-  // redis
   REDIS_CONFIG = {
     host: '127.0.0.1',
     port: 6379,
@@ -27,16 +25,14 @@ if (env === 'dev') {
 }
 
 if (env === 'production') {
-  // mysql
   MYSQL_CONFIG = {
     host: '127.0.0.1',
     port: 3306,
     user: 'root',
-    password: 'lpj374453156....',
+    password: '123456',
     database: 'myblog'
   },
 
-  // redis
   REDIS_CONFIG = {
     host: '127.0.0.1',
     port: 6379,
