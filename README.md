@@ -127,3 +127,83 @@
   - access log 记录，使用express脚手架推荐的morgan
 
   - 自定义日志使用console.log & console.error
+
+------------------
+
+# express中间件机制 & 原理分析
+
+> 采用ES6语法 面向对象、面向接口 编程实现
+
+- 注册的中间件需要收集起来
+
+- 遇到http请求，需要根据path和method判断触发哪些中间件
+
+- 实现中间件机制的next()机制
+
+- 实现中间件机制的核心接口
+
+  - app.listen(PORT, callback)
+
+  - app.use()
+
+    - app.use(middleware)
+
+    - app.use('/', callback)
+
+    - app.use('/', middlewares, callback)
+
+  - app.get()
+
+    - app.get(middleware)
+
+    - app.get('/', callback)
+
+    - app.get('/', middlewares, callback)
+
+  - app.post()
+
+    - app.post(middleware)
+
+    - app.post('/', callback)
+
+    - app.post('/', middlewares, callback)
+
+  - res.json()
+
+
+-------------------------
+
+## 实现笔记
+
+- 以下两种写法等价
+
+  ```js
+    app.use((req, res, next) => {
+      // ...
+    })
+
+    app.use('/', (req, res, next) => {
+      // ...
+    })
+  ```
+
+- 对于url: /api/user/login，如下形式path的中间件都对应
+
+  ```
+    /
+    /api
+    /api/user
+    /api/user/login
+  ```
+
+- 所以使用方法indexOf()
+
+  ```js
+    url.indexOf(path) === 0
+  ```
+
+- 第一个中间件会立即执行，如果用户使用了next()，就会继续使用下一个中间件
+
+  ```js
+    Array.prototype.shift()
+  ```
