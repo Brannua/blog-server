@@ -26,31 +26,31 @@
 
 > 开发笔记 & 文档
 
-- [学习Node.js开发server端的前置知识](https://blog.csdn.net/Brannua/article/details/105087923)
+<a href="https://blog.csdn.net/Brannua/article/details/105087923" target="_blank">学习Node.js开发server端的前置知识</a>
 
-- [项目需求分析](https://blog.csdn.net/Brannua/article/details/105157351)
+<a href="https://blog.csdn.net/Brannua/article/details/105157351" target="_blank">项目需求分析</a>
 
-  - [接口设计](https://blog.csdn.net/Brannua/article/details/105157405)
-
-  - [数据存储](https://blog.csdn.net/Brannua/article/details/105157460)
-
-    - [SQL语句的基本操作](https://blog.csdn.net/Brannua/article/details/104652438)
-
-    - [Node.js连接Mysql基本操作](https://blog.csdn.net/Brannua/article/details/104655696)
-
-  - [登录功能](https://blog.csdn.net/Brannua/article/details/105157696)
-
-    - [redis基本操作 & nodejs连接redis总结](https://blog.csdn.net/Brannua/article/details/105068265)
-
-  - [配置nginx反向代理和前端同域联调](https://blog.csdn.net/Brannua/article/details/105156821)
-
-  - [日志记录](https://blog.csdn.net/Brannua/article/details/105166088)
-
-    - [Node.js文件操作基础](https://blog.csdn.net/Brannua/article/details/105139779)
-
-    - [使用stream的方式进行服务端文件操作的原因和demo](https://blog.csdn.net/Brannua/article/details/105141050)
+  <a href="https://blog.csdn.net/Brannua/article/details/105157405" target="_blank">接口设计</a>
+  
+  <a href="https://blog.csdn.net/Brannua/article/details/105157460" target="_blank">数据存储</a>
+  
+    <a href="https://blog.csdn.net/Brannua/article/details/104652438" target="_blank">SQL语句的基本操作</a>
     
-  - [网站后端安全](https://blog.csdn.net/Brannua/article/details/105185511)
+    <a href="https://blog.csdn.net/Brannua/article/details/104655696" target="_blank">Node.js连接Mysql基本操作</a>
+    
+  <a href="https://blog.csdn.net/Brannua/article/details/105157696" target="_blank">登录功能</a>
+  
+    <a href="https://blog.csdn.net/Brannua/article/details/105068265" target="_blank">redis基本操作 & nodejs连接redis总结</a>
+    
+  <a href="https://blog.csdn.net/Brannua/article/details/105156821" target="_blank">配置nginx反向代理和前端同域联调</a>
+  
+  <a href="https://blog.csdn.net/Brannua/article/details/105166088" target="_blank">日志记录</a>
+  
+    <a href="https://blog.csdn.net/Brannua/article/details/105139779" target="_blank">Node.js文件操作基础</a>
+    
+    <a href="https://blog.csdn.net/Brannua/article/details/105141050" target="_blank">使用stream的方式进行服务端文件操作的原因和demo</a>
+    
+  <a href="https://blog.csdn.net/Brannua/article/details/105185511" target="_blank">网站后端安全</a>
 
 ## express-server： 使用express框架对./server的重构版本
 
